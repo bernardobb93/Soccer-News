@@ -1,5 +1,8 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 
 android {
@@ -39,6 +42,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.1'
     implementation 'androidx.navigation:navigation-ui:2.5.1'
+
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
     // Retrofit (HTTP Client): https://square.github.io/retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -46,6 +53,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.8'
     //Room oferece uma camada de abstração sobre o SQLite : https://developer.android.com/jetpack/androidx/releases/room
     implementation "androidx.room:room-runtime:2.4.3"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     annotationProcessor "androidx.room:room-compiler:2.4.3"
 
     testImplementation 'junit:junit:4.13.2'

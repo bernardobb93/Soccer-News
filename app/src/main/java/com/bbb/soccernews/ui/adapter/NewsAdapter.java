@@ -19,9 +19,11 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     private final List<News> news;
     private final FavoriteListener favoriteListener;
+
     public NewsAdapter(List<News>news, FavoriteListener favoriteListener){
-        this.favoriteListener = favoriteListener;
         this.news=news;
+        this.favoriteListener = favoriteListener;
+
     }
 
     @NonNull
@@ -32,50 +34,42 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         return new ViewHolder(binding);
     }
 
-    @Override
-    public int getItemCount() {
-        return this.news.size();
-    }
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Context context = holder.itemView.getContext();
+
         News news = this.news.get(position);
-        holder.binding.tvNewTitle.setText(news.title);
-        holder.binding.tvNewDescription.setText(news.description);
-        Picasso.get().load(news.image)
-                .fit()
-                .into(holder.binding.ivNew);
+        holder.binding.tvTitle.setText(news.title);
+        holder.binding.tvDescription.setText(news.description);
+        Picasso.get().load(news.image).fit().into(holder.binding.ivThumbnail);
         //Implementação de abrir link pelo botao
         holder.binding.btOpenLink.setOnClickListener(view ->{
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(news.link));
-            holder.itemView.getContext().startActivity(i);
+            context.startActivity(i);
         });
         //Implementação de compartilhamento
         holder.binding.ivShare.setOnClickListener(view->{
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
-            i.putExtra(Intent.EXTRA_SUBJECT, news.title);
             i.putExtra(Intent.EXTRA_TEXT, news.link);
-            holder.itemView
-                    .getContext()
-                    .startActivity(Intent.createChooser(i,""));
+            context.startActivity(Intent.createChooser(i,"Share"));
         });
         //Implementação de favoritar
         holder.binding.ivFavorite.setOnClickListener(view -> {
             news.favorite = !news.favorite;
-            this.favoriteListener.onClick(news);
+            this.favoriteListener.onFavorite(news);
             notifyItemChanged(position);
         });
-    if (news.favorite){
-        holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(R.color.red));
+        int favoriteColor = news.favorite ? R.color.red : R.color.gray;
+        holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(favoriteColor));
     }
-    else{
-        holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(R.color.gray));
+    @Override
+    public int getItemCount() {
+        return this.news.size();
     }
-    }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -87,6 +81,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         }
     }
     public interface FavoriteListener{
-        void onClick(News news);
+        void onFavorite(News news);
     }
 }

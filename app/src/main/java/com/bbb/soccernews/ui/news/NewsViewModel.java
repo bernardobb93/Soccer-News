@@ -1,13 +1,15 @@
 package com.bbb.soccernews.ui.news;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 
-import com.bbb.soccernews.data.local.AppDatabase;
+import com.bbb.soccernews.data.SoccerNewsRepository;
+import com.bbb.soccernews.data.local.SoccerNewsDb;
 import com.bbb.soccernews.data.remote.SoccerNewsApi;
 import com.bbb.soccernews.domain.News;
 
@@ -24,25 +26,16 @@ public class NewsViewModel extends ViewModel {
     public enum State{
         DOING,DONE,ERROR
     }
-    private final SoccerNewsApi api;
     private final MutableLiveData<State> state=new MutableLiveData<>();
     private final MutableLiveData<List<News>> news=new MutableLiveData<>();
 
     public NewsViewModel() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://bernardobb93.github.io/soccer-news-Api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        api = retrofit.create(SoccerNewsApi.class);
-
-
         this.findNews();
     }
 
-    private void findNews() {
+    public void findNews() {
         state.setValue(State.DOING);
-        api.getNews().enqueue(new Callback<List<News>>() {
+        SoccerNewsRepository.getInstance().getRemoteApi().getNews().enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
                if (response.isSuccessful()){
@@ -55,14 +48,20 @@ public class NewsViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<News>> call, Throwable t) {
+            public void onFailure(Call<List<News>> call, Throwable error) {
+                error.printStackTrace();
                 state.setValue(State.ERROR);
             }
         });
     }
+    public void saveNews(News news) {
+        AsyncTask.execute(() -> SoccerNewsRepository.getInstance().getLocalDb().newsDao().save(news));
+    }
+
     public LiveData<List<News>> getNews() {
         return this.news;
     }
+
     public LiveData<State> getState() {
         return this.state;
     }

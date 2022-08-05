@@ -1,8 +1,9 @@
-package com.bbb.soccernews;
+package com.bbb.soccernews.ui;
 
 import android.os.Bundle;
 
-import com.bbb.soccernews.data.local.AppDatabase;
+import com.bbb.soccernews.R;
+import com.bbb.soccernews.data.local.SoccerNewsDb;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,7 +17,7 @@ import com.bbb.soccernews.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private AppDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,17 +32,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        DB();
+
     }
 
-    private void DB() {
-        db = Room.databaseBuilder(this,
-                        AppDatabase .class, "soccer-news")
-                .allowMainThreadQueries()
-                .build();
-    }
-
-    public AppDatabase getDb() {
-        return db;
-    }
 }
