@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/workspace/SoccerNews/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/workspace/SoccerNews/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/workspace/SoccerNews/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/workspace/SoccerNews/app/src/main/res/layout/fragment_favorites.xml" value="0.15579710144927536" />
         <entry key="..\:/workspace/SoccerNews/app/src/main/res/layout/fragment_news.xml" value="0.15579710144927536" />
